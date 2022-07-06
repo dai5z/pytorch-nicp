@@ -30,11 +30,12 @@ with torch.no_grad():
     bfm_lm_index_m = bfm_lm_index[:, lm_mask]
     target_lm_index_m = target_lm_index[:, lm_mask]
 
-fine_config = json.load(open('config/fine_grain.json'))
+print(bfm_lm_index_m,target_lm_index_m)
+'''fine_config = json.load(open('config/fine_grain.json'))
 registered_mesh = non_rigid_icp_mesh2mesh(bfm_meshes, norm_meshes, bfm_lm_index_m, target_lm_index_m, fine_config)
-io3d.save_meshes_as_objs(['final.obj'], registered_mesh, save_textures = False)
+io3d.save_meshes_as_objs(['final.obj'], registered_mesh, save_textures = False)'''
 
-
+'''
 # demo for registering point cloud
 device = torch.device('cuda:0')
 pcls = io3d.load_ply_as_pointcloud('./test_data/test2.ply', device = device)
@@ -53,4 +54,4 @@ bfm_lm_index_m = bfm_lm_index[:, lm_mask]
 target_lm_index_m = target_lm_index[:, lm_mask]
 coarse_config = json.load(open('config/coarse_grain.json'))
 registered_mesh = non_rigid_icp_mesh2pcl(bfm_meshes, norm_pcls, bfm_lm_index_m, target_lm_index_m, coarse_config)
-io3d.save_meshes_as_objs(['test_data/final2.obj'], registered_mesh, save_textures = False)
+io3d.save_meshes_as_objs(['test_data/final2.obj'], registered_mesh, save_textures = False)'''

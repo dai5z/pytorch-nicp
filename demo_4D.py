@@ -122,5 +122,5 @@ for i in range(len(point_list)):
         t2 = time.time()
         print(t2 - t1)
     
-    if i == 12:
+    if i == 22:
         io3d.save_meshes_as_objs(['test_data/final3.obj'], registered_mesh, save_textures = False)

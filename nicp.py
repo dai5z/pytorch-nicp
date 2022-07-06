@@ -4,6 +4,7 @@
 # and is released under the "MIT License Agreement". Please see the LICENSE
 # file that should have been included as part of this package.
 
+from matplotlib.pyplot import close
 import numpy as np
 from pytorch3d.ops.laplacian_matrices import laplacian
 import render
@@ -67,8 +68,8 @@ def non_rigid_icp_mesh2pcl(
 
     boundary_mask = mesh_boundary(template_mesh.faces_padded()[0], template_vertex.shape[1])
     boundary_mask = boundary_mask.unsqueeze(0).unsqueeze(2)
-    inner_mask = torch.logical_not(boundary_mask)
 
+    inner_mask = torch.logical_not(boundary_mask)
     # masking abnormal points according to the normal seems to be useless, we use distance mask in our framework
     # if pcl_normal is None:
     #     # estimate normal for point cloud
@@ -78,8 +79,10 @@ def non_rigid_icp_mesh2pcl(
     # rigid align
     target_lm = batch_vertex_sample(target_lm_index, target_vertex)
     template_lm = batch_vertex_sample(template_lm_index, template_vertex)
+    
     R, T, s = corresponding_points_alignment(template_lm, target_lm, estimate_scale = True)
     transformed_vertex = s[:, None, None] * torch.bmm(template_vertex, R) + T[:, None, :]
+    
 
     # define the transformation model
     template_edges = template_mesh.edges_packed()
@@ -118,6 +121,9 @@ def non_rigid_icp_mesh2pcl(
 
         knn = knn_points(new_deformed_verts, target_sample_verts)
         close_points = knn_gather(target_sample_verts, knn.idx)[:, :, 0]
+        '''print(new_deformed_verts)
+        print(close_points)
+        exit()'''
         # close_normals = knn_gather(pcl_normal, knn.idx)[:, :, 0]
 
         if (i == 0) and (in_affine is None):
